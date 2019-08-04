@@ -18,7 +18,8 @@ namespace DBUtility
     {
         #region 公共变量
         //数据库连接字符串
-        private static string _ConnectionStringLocalTransaction = ConfigurationManager.ConnectionStrings["SqlConnectionString"].ConnectionString;
+        private static string _ConnectionStringLocalTransaction = "Server=.;DataBase=Map;Uid=sa;Pwd=zxczxczxc1";
+        private static string _ConnectionStringLocalTransaction2 = "Server=.;DataBase=Public_db_Park;Uid=sa;Pwd=zxczxczxc1";
         //Hashtable 存储参数
         private static Hashtable _ParmCache = Hashtable.Synchronized(new Hashtable());
         #endregion
@@ -26,13 +27,24 @@ namespace DBUtility
         #region 数据库连接
 
         /// <summary>
-        /// 数据库连接字符串
+        /// 数据库连接字符串  Map
         /// </summary>
         public static string ConnectionString
         {
             get
             {
                 return _ConnectionStringLocalTransaction;
+            }
+        }
+
+        /// <summary>
+        /// 数据库连接字符串2 Public_db_Park
+        /// </summary>
+        public static string ConnectionString2
+        {
+            get
+            {
+                return _ConnectionStringLocalTransaction2;
             }
         }
 

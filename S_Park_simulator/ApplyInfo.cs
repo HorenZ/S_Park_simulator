@@ -35,8 +35,8 @@ namespace S_Park_simulator
             set { parkPosintion = value; }
         }
 
-        private bool state;
-        public bool State
+        private int state;
+        public int State
         {
             get { return state; }
             set { state = value; }
