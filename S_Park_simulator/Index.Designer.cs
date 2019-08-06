@@ -107,6 +107,7 @@
             this.btnOut.TabIndex = 2;
             this.btnOut.Text = "确定";
             this.btnOut.UseVisualStyleBackColor = true;
+            this.btnOut.Click += new System.EventHandler(this.BtnOut_Click);
             // 
             // label2
             // 
@@ -154,6 +155,7 @@
             this.txbParkID.Name = "txbParkID";
             this.txbParkID.Size = new System.Drawing.Size(53, 25);
             this.txbParkID.TabIndex = 3;
+            this.txbParkID.Text = "1";
             // 
             // btnStart
             // 

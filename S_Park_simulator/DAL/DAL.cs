@@ -16,12 +16,12 @@ namespace S_Park_simulator.DAL
         /// <returns></returns>
         public List<ApplyInfo> GetAllInfo(string pid)
         {
-            string sqltxt = "Select * From ApplyInfo Where ParkID=@ParkID and State=False";
+            string sqltxt = "Select * From ApplyInfo Where ParkID=@ParkID";
             SqlParameter para=new SqlParameter("@ParkID",pid);
             List<ApplyInfo> list = new List<ApplyInfo>();
             ApplyInfo apply;
             SqlDataReader reader = SqlHelper.ExecuteReader(
-                SqlHelper.ConnectionString,
+                SqlHelper.ConnectionString2,
                 CommandType.Text,
                 sqltxt,
                 para);
@@ -32,7 +32,7 @@ namespace S_Park_simulator.DAL
                 apply.HID = (int)reader["HID"];
                 apply.ParkID = (int)reader["ParkID"];
                 apply.ParkPosintion = reader["ParkPosintion"].ToString();
-                apply.State = (bool)reader["State"];
+                apply.State = (int)reader["State"];
                 list.Add(apply);
             }
 
@@ -68,7 +68,7 @@ namespace S_Park_simulator.DAL
         /// <returns></returns>
         public bool OrderPark(string hid)
         {
-            string sqltxt = "Update ApplyInfo Set State=0,ParkPosintion=@ParkPosintion Where HID=@HID";
+            string sqltxt = "Update ApplyInfo Set State=1,ParkPosintion=@ParkPosintion Where HID=@HID";
             SqlParameter[] paras=new SqlParameter[2];
             paras[0]=new SqlParameter("@HID",hid);
             paras[1]=new SqlParameter("@ParkPosintion",new Random().Next(0,250).ToString());
@@ -100,10 +100,60 @@ namespace S_Park_simulator.DAL
             return i;
         }
 
-        public bool FinishOrder(DateTime dt)
+        public bool ConfirmStatTime(string hid)
         {
-            SqlParameter para=new SqlParameter("@EndTime",dt);
-            string sqltxt= "Update History Set EndTime=@EndTime Where HID="
+            string sqltxt1 = "Update History Set State=1,StartTime=@StartTime Where HID=@HID";
+            SqlParameter[] paras=new SqlParameter[2];
+            paras[0] = new SqlParameter("@StartTime", DateTime.Now);
+            paras[1]=new SqlParameter("@HID",hid);
+            int i = SqlHelper.ExecuteNonQuery(
+                SqlHelper.ConnectionString,
+                CommandType.Text,
+                sqltxt1,
+                paras);
+            if (i!=1)
+            {
+                return true;
+            }
+
+            return false;
         }
+
+        public bool ConfirmEndTime(string hid)
+        {
+            string sqltxt1 = "Update History Set State=2,EndTime=@EndTime Where HID=@HID";
+            SqlParameter[] paras = new SqlParameter[2];
+            paras[0] = new SqlParameter("@EndTime", DateTime.Now);
+            paras[1] = new SqlParameter("@HID", hid);
+            int i = SqlHelper.ExecuteNonQuery(
+                SqlHelper.ConnectionString,
+                CommandType.Text,
+                sqltxt1,
+                paras);
+            if (i != 1)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool DeleteApply(string hid)
+        {
+            string sqltxt = "Delete From ApplyInfo Where HID=@HID";
+            SqlParameter para=new SqlParameter("@HID",hid);
+            int i = SqlHelper.ExecuteNonQuery(
+                SqlHelper.ConnectionString2,
+                CommandType.Text,
+                sqltxt,
+                para);
+            if (i!=1)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
     }
 }
